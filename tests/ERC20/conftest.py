@@ -12,17 +12,8 @@ from settings import *
 @pytest.fixture(scope='module', autouse=True)
 def minimal_erc20(BokkyPooBahsMinimalERC20):
 
-    deployer = accounts[0]
-    token_owner = accounts[1]
-    symbol = 'BTN'
-    name = 'BASE TOKEN'
-    decimals = 18
-    fixed_supply = '1000 ether'
-
-    minimal_erc20 = BokkyPooBahsMinimalERC20.deploy({'from': deployer})
-
-    tx = minimal_erc20.init(token_owner, symbol, name, decimals, fixed_supply, {'from': deployer})
-
-    assert tx.events['Transfer'] == {'from': ZERO_ADDRESS, 'to': token_owner, 'tokens': fixed_supply}
-
+    minimal_erc20 = BokkyPooBahsMinimalERC20.deploy({'from': accounts[DEPLOYER]})
+    tx = minimal_erc20.init(accounts[OWNER], SYMBOL, NAME, DECIMAL, SUPPLY, {'from': accounts[DEPLOYER]})
+  
+    assert tx.events['Transfer'] == {'from': ZERO_ADDRESS, 'to': accounts[OWNER], 'tokens': SUPPLY}
     return minimal_erc20
